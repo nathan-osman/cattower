@@ -6,6 +6,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/nathan-osman/cattower/server"
 	"github.com/urfave/cli/v2"
 )
 
@@ -17,6 +18,13 @@ func main() {
 			installCommand,
 		},
 		Action: func(c *cli.Context) error {
+
+			// Create the server
+			s, err := server.New()
+			if err != nil {
+				return err
+			}
+			defer s.Close()
 
 			// Wait for SIGINT or SIGTERM
 			sigChan := make(chan os.Signal, 1)
