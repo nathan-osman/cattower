@@ -6,6 +6,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/nathan-osman/cattower/hardware"
 	"github.com/nathan-osman/cattower/server"
 	"github.com/urfave/cli/v2"
 )
@@ -19,8 +20,15 @@ func main() {
 		},
 		Action: func(c *cli.Context) error {
 
+			// Init the hardware
+			h, err := hardware.New()
+			if err != nil {
+				return err
+			}
+			defer h.Close()
+
 			// Create the server
-			s, err := server.New()
+			s, err := server.New(h)
 			if err != nil {
 				return err
 			}

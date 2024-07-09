@@ -7,14 +7,16 @@ import (
 
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
+	"github.com/nathan-osman/cattower/hardware"
 	"github.com/nathan-osman/cattower/ui"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
 
 type Server struct {
-	server http.Server
-	logger zerolog.Logger
+	server   http.Server
+	logger   zerolog.Logger
+	hardware *hardware.Hardware
 }
 
 func init() {
@@ -22,7 +24,7 @@ func init() {
 	gin.SetMode(gin.ReleaseMode)
 }
 
-func New() (*Server, error) {
+func New(h *hardware.Hardware) (*Server, error) {
 
 	// Initialize the server
 	var (
@@ -32,7 +34,8 @@ func New() (*Server, error) {
 				Addr:    ":8000",
 				Handler: r,
 			},
-			logger: log.With().Str("package", "server").Logger(),
+			logger:   log.With().Str("package", "server").Logger(),
+			hardware: h,
 		}
 	)
 
@@ -45,6 +48,16 @@ func New() (*Server, error) {
 			},
 		),
 	)
+
+	groupApi := r.Group("/api")
+	{
+		// Use the session and our custom user middleware for the API
+		groupApi.Use(
+			gin.CustomRecoveryWithWriter(nil, panicToJSONError),
+		)
+
+		groupApi.POST("/set-colors", s.apiSetColors)
+	}
 
 	// Serve the static files on all other paths too
 	r.NoRoute(func(c *gin.Context) {
