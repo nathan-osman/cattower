@@ -8,6 +8,9 @@ module.exports = {
     extend: {
       colors: {
         'background': 'var(--background)',
+        'foreground': 'var(--foreground)',
+        'background-inverted': 'var(--background-inverted)',
+        'foreground-inverted': 'var(--foreground-inverted)',
       }
     },
   },

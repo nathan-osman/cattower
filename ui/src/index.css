@@ -3,5 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --background: #e0e0e0;
+  --background: #f0f0f0;
+  --foreground: #202020;
+
+  --background-inverted: #404040;
+  --foreground-inverted: var(--background);
 }
