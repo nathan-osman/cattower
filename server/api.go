@@ -35,5 +35,8 @@ func (s *Server) apiSetColors(c *gin.Context) {
 	default:
 		panic("unrecognized command")
 	}
+	if err := s.hardware.Write(); err != nil {
+		panic(err)
+	}
 	c.Status(http.StatusNoContent)
 }
