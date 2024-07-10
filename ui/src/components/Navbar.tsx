@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 
 export default function Navbar() {
   return (
-    <div className="bg-background-inverted text-foreground-inverted shadow-md px-4 py-2 flex items-center">
+    <div className="bg-background-inverted text-foreground-inverted shadow-md p-4 flex items-center">
       <div className="grow">
         <Link to="/">
           <img src={HomeSvg} className="w-8" />

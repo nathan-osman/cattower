@@ -23,7 +23,7 @@ export default function Clock() {
   }, [])
 
   return (
-    <div>
+    <div className="text-xl">
       {time}
     </div>
   )
