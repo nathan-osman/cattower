@@ -8,8 +8,10 @@ import (
 )
 
 const (
-	cmdTopOn  = "top_on"
-	cmdTopOff = "top_off"
+	cmdTopOn    = "top_on"
+	cmdTopOff   = "top_off"
+	cmdSidesOn  = "sides_on"
+	cmdSidesOff = "sides_off"
 )
 
 type apiSetColorsParams struct {
@@ -32,6 +34,10 @@ func (s *Server) apiSetColors(c *gin.Context) {
 		s.fillPixels(32, 48, color.White)
 	case cmdTopOff:
 		s.fillPixels(32, 48, color.Black)
+	case cmdSidesOn:
+		s.fillPixels(0, 32, color.White)
+	case cmdSidesOff:
+		s.fillPixels(0, 32, color.Black)
 	default:
 		panic("unrecognized command")
 	}

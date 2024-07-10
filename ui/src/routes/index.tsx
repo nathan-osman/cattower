@@ -22,13 +22,23 @@ export default function Index() {
       <div className="flex gap-x-4">
         <BigButton
           icon={LampSvg}
-          text="Turn LED on"
+          text="Top LEDs on"
           onClick={() => sendCommand('top_on')}
         />
         <BigButton
           icon={LampSvg}
-          text="Turn LED off"
+          text="Top LEDs off"
           onClick={() => sendCommand('top_off')}
+        />
+        <BigButton
+          icon={LampSvg}
+          text="Side LEDs on"
+          onClick={() => sendCommand('sides_on')}
+        />
+        <BigButton
+          icon={LampSvg}
+          text="Side LEDs off"
+          onClick={() => sendCommand('sides_off')}
         />
       </div>
     </>
