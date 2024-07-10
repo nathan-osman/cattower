@@ -21,6 +21,10 @@ module.exports = {
           'postcss-loader',
         ],
       },
+      {
+        test: /\.svg$/,
+        type: 'asset/resource',
+      },
     ],
   },
   resolve: {

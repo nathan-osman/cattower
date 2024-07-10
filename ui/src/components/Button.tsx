@@ -1,20 +1,25 @@
-import { ButtonHTMLAttributes } from 'react'
+import { ButtonHTMLAttributes, PropsWithChildren } from 'react'
+import { clsx } from 'clsx'
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-  text: string
-  primary?: boolean
+  className?: string
 }
 
-export default function Button(props: Props) {
+export default function Button(props: PropsWithChildren<Props>) {
 
-  const { text, ...buttonProps } = props
+  const { className, ...buttonProps } = props
+
+  const combinedClassName = clsx(
+    className,
+    "p-2 border rounded shadow-md bg-white",
+  )
 
   return (
     <button
       {...buttonProps}
-      className="p-2 border rounded shadow"
+      className={combinedClassName}
     >
-      {text}
+      {props.children}
     </button>
   )
 }

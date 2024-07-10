@@ -1,4 +1,5 @@
-import Button from '../components/Button'
+import BigButton from '../components/BigButton'
+import LampSvg from '../images/lamp.svg'
 
 export default function Index() {
 
@@ -16,17 +17,20 @@ export default function Index() {
 
   return (
     <>
-      <p>Home page</p>
+      <p>Main controls page</p>
       <br />
-      <Button
-        text="Turn LED on"
-        onClick={() => sendCommand('top_on')}
-      />
-      <br />
-      <Button
-        text="Turn LED off"
-        onClick={() => sendCommand('top_off')}
-      />
+      <div className="flex gap-x-4">
+        <BigButton
+          icon={LampSvg}
+          text="Turn LED on"
+          onClick={() => sendCommand('top_on')}
+        />
+        <BigButton
+          icon={LampSvg}
+          text="Turn LED off"
+          onClick={() => sendCommand('top_off')}
+        />
+      </div>
     </>
   )
 }
