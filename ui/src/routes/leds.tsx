@@ -35,7 +35,7 @@ export default function Leds() {
       <BigButton
         icon={LampSvg}
         text="Side LEDs off"
-        onClick={() => sendCommand('sides_on')}
+        onClick={() => sendCommand('sides_off')}
       />
     </div>
   )
