@@ -25,7 +25,7 @@ WantedBy=multi-user.target
 	configFile = `# TODO: use this file to configure the application
 
 influxdb:
-  url:
+  addr:
   username:
   password:
   database:

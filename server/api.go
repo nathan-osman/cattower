@@ -1,10 +1,12 @@
 package server
 
 import (
+	"encoding/json"
 	"image/color"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/influxdata/influxdb/client/v2"
 )
 
 const (
@@ -45,4 +47,25 @@ func (s *Server) apiSetColors(c *gin.Context) {
 		panic(err)
 	}
 	c.Status(http.StatusNoContent)
+}
+
+func (s *Server) apiGetSensors(c *gin.Context) {
+	r, err := s.client.Query(client.Query{
+		Command:  `SELECT LAST("value") from "temperature" GROUP BY "location"`,
+		Database: s.cfg.InfluxDB.Database,
+	})
+	if err != nil {
+		panic(err)
+	}
+	o := map[string]float64{}
+	for _, r := range r.Results {
+		for _, s := range r.Series {
+			v, err := s.Values[0][1].(json.Number).Float64()
+			if err != nil {
+				panic(err)
+			}
+			o[s.Tags["location"]] = v
+		}
+	}
+	c.JSON(http.StatusOK, o)
 }

@@ -7,6 +7,8 @@ import (
 
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
+	"github.com/influxdata/influxdb/client/v2"
+	"github.com/nathan-osman/cattower/config"
 	"github.com/nathan-osman/cattower/hardware"
 	"github.com/nathan-osman/cattower/ui"
 	"github.com/rs/zerolog"
@@ -16,6 +18,8 @@ import (
 type Server struct {
 	server   http.Server
 	logger   zerolog.Logger
+	cfg      *config.Config
+	client   client.Client
 	hardware *hardware.Hardware
 }
 
@@ -24,7 +28,18 @@ func init() {
 	gin.SetMode(gin.ReleaseMode)
 }
 
-func New(h *hardware.Hardware) (*Server, error) {
+func New(cfg *config.Config, h *hardware.Hardware) (*Server, error) {
+
+	// Create the InfluxDB client
+	c, err := client.NewHTTPClient(client.HTTPConfig{
+		Addr:     cfg.InfluxDB.Addr,
+		Username: cfg.InfluxDB.Username,
+		Password: cfg.InfluxDB.Password,
+	})
+	if err != nil {
+		return nil, err
+	}
+	defer c.Close()
 
 	// Initialize the server
 	var (
@@ -35,6 +50,8 @@ func New(h *hardware.Hardware) (*Server, error) {
 				Handler: r,
 			},
 			logger:   log.With().Str("package", "server").Logger(),
+			cfg:      cfg,
+			client:   c,
 			hardware: h,
 		}
 	)
@@ -57,6 +74,7 @@ func New(h *hardware.Hardware) (*Server, error) {
 		)
 
 		groupApi.POST("/set-colors", s.apiSetColors)
+		groupApi.GET("/get-sensors", s.apiGetSensors)
 	}
 
 	// Serve the static files on all other paths too

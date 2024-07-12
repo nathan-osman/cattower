@@ -46,7 +46,7 @@ func main() {
 			defer h.Close()
 
 			// Create the server
-			s, err := server.New(h)
+			s, err := server.New(cfg, h)
 			if err != nil {
 				return err
 			}

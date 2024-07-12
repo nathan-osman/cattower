@@ -6,6 +6,7 @@ require (
 	github.com/Jon-Bright/ledctl v0.0.0-20220811175751-98f2a0ba0a4b
 	github.com/gin-contrib/static v1.1.2
 	github.com/gin-gonic/gin v1.10.0
+	github.com/influxdata/influxdb v1.11.5
 	github.com/rs/zerolog v1.33.0
 	github.com/urfave/cli/v2 v2.27.2
 	gopkg.in/yaml.v3 v3.0.1
