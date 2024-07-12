@@ -9,6 +9,7 @@ module.exports = {
       colors: {
         'background': 'var(--background)',
         'foreground': 'var(--foreground)',
+        'background-selected': 'var(--background-selected)',
         'background-inverted': 'var(--background-inverted)',
         'foreground-inverted': 'var(--foreground-inverted)',
       }

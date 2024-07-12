@@ -6,6 +6,8 @@
   --background: #f0f0f0;
   --foreground: #202020;
 
+  --background-selected: #c0c0c0;
+
   --background-inverted: #404040;
   --foreground-inverted: var(--background);
 }
