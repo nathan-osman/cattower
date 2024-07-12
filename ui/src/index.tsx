@@ -6,6 +6,8 @@ import {
 } from 'react-router-dom'
 import App from './components/App'
 import Index from './routes'
+import Leds from './routes/leds'
+import Sensors from './routes/sensors'
 import './index.css'
 
 const router = createBrowserRouter([
@@ -16,6 +18,14 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <Index />,
+      },
+      {
+        path: '/leds',
+        element: <Leds />,
+      },
+      {
+        path: '/sensors',
+        element: <Sensors />,
       },
     ],
   },
