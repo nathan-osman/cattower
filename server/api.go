@@ -49,6 +49,11 @@ func (s *Server) apiSetColors(c *gin.Context) {
 	c.Status(http.StatusNoContent)
 }
 
+type apiGetSensorsResponse struct {
+	Name  string  `json:"name"`
+	Value float64 `json:"value"`
+}
+
 func (s *Server) apiGetSensors(c *gin.Context) {
 	r, err := s.client.Query(client.Query{
 		Command:  `SELECT LAST("value") from "temperature" GROUP BY "location"`,
@@ -57,14 +62,17 @@ func (s *Server) apiGetSensors(c *gin.Context) {
 	if err != nil {
 		panic(err)
 	}
-	o := map[string]float64{}
+	o := []apiGetSensorsResponse{}
 	for _, r := range r.Results {
 		for _, s := range r.Series {
 			v, err := s.Values[0][1].(json.Number).Float64()
 			if err != nil {
 				panic(err)
 			}
-			o[s.Tags["location"]] = v
+			o = append(o, apiGetSensorsResponse{
+				Name:  s.Tags["location"],
+				Value: v,
+			})
 		}
 	}
 	c.JSON(http.StatusOK, o)
