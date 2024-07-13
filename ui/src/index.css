@@ -11,3 +11,7 @@
   --background-inverted: #404040;
   --foreground-inverted: var(--background);
 }
+
+body {
+  @apply text-xl;
+}

@@ -22,8 +22,8 @@ export default function Button(props: PropsWithChildren<Props>) {
   return (
     <button
       {...buttonProps}
-      onMouseDown={() => setPressed(true)}
-      onMouseUp={() => setPressed(false)}
+      onTouchStart={() => setPressed(true)}
+      onTouchEnd={() => setPressed(false)}
       className={combinedClassName}
     >
       {props.children}

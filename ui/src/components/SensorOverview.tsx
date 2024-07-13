@@ -23,7 +23,7 @@ export default function SensorOverview() {
   }, [])
 
   return (
-    <table className="border-separate border-spacing-x-2 text-xl">
+    <table className="border-separate border-spacing-x-2">
       {
         values.map(v => (
           <tr>
