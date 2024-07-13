@@ -35,7 +35,7 @@ func (h *Hardware) SetPixel(i int, c color.Color) {
 	)
 }
 
-func (h *Hardware) Write() error {
+func (h *Hardware) WritePixels() error {
 	return h.ledStrip.Write()
 }
 

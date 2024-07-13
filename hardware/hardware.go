@@ -15,5 +15,5 @@ func New() (*Hardware, error) {
 }
 
 func (h *Hardware) SetPixel(i int, c color.Color) {}
-func (h *Hardware) Write() error                  { return nil }
+func (h *Hardware) WritePixels() error            { return nil }
 func (h *Hardware) Close()                        {}
