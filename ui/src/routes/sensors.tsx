@@ -1,7 +1,9 @@
-
+import MotionLog from '../components/MotionLog'
 
 export default function Sensors() {
   return (
-    <h1>Sensors</h1>
+    <div className="flex h-full">
+      <MotionLog />
+    </div>
   )
 }

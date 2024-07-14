@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/nathan-osman/cattower/hardware"
 	"github.com/nathan-osman/cattower/influxdb"
+	"github.com/nathan-osman/cattower/motion"
 	"github.com/nathan-osman/cattower/ui"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -20,6 +21,7 @@ type Server struct {
 	logger   zerolog.Logger
 	hardware *hardware.Hardware
 	influxdb *influxdb.InfluxDB
+	motion   *motion.Motion
 }
 
 func init() {
@@ -31,6 +33,7 @@ func New(
 	cfg *Config,
 	h *hardware.Hardware,
 	i *influxdb.InfluxDB,
+	m *motion.Motion,
 ) (*Server, error) {
 
 	// Initialize the server
@@ -45,6 +48,7 @@ func New(
 			logger:   log.With().Str("package", "server").Logger(),
 			hardware: h,
 			influxdb: i,
+			motion:   m,
 		}
 	)
 
@@ -76,6 +80,7 @@ func New(
 		)
 
 		groupApi.POST("/leds/set-colors", s.apiLedsSetColors)
+		groupApi.GET("/motion/log", s.apiMotionLog)
 		groupApi.GET("/sensors/overview", s.apiSensorsOverview)
 		groupApi.GET("/videos", s.apiVideosIndex)
 	}

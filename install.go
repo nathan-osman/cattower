@@ -29,6 +29,10 @@ influxdb:
   username:
   password:
   database:
+motion:
+  pin: 7
+  cooldown: 2s
+  log_size: 20
 `
 )
 

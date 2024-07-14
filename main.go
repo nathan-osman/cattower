@@ -9,6 +9,7 @@ import (
 	"github.com/nathan-osman/cattower/config"
 	"github.com/nathan-osman/cattower/hardware"
 	"github.com/nathan-osman/cattower/influxdb"
+	"github.com/nathan-osman/cattower/motion"
 	"github.com/nathan-osman/cattower/server"
 	"github.com/urfave/cli/v2"
 	"gopkg.in/yaml.v3"
@@ -53,8 +54,16 @@ func main() {
 			}
 			defer i.Close()
 
+			// Init motion detection
+			m, err := motion.New(&cfg.Motion, h)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "warning: %s\n", err.Error())
+			} else {
+				defer m.Close()
+			}
+
 			// Create the server
-			s, err := server.New(&cfg.Server, h, i)
+			s, err := server.New(&cfg.Server, h, i, m)
 			if err != nil {
 				return err
 			}

@@ -1,6 +1,8 @@
 package motion
 
 import (
+	"errors"
+	"sync"
 	"time"
 
 	"github.com/nathan-osman/cattower/hardware"
@@ -8,12 +10,15 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-var (
-	cooldownInterval = 10 * time.Second
-)
+type Event struct {
+	Timestamp time.Time `json:"timestamp"`
+	Motion    bool      `json:"motion"`
+}
 
 type Motion struct {
-	pin        uint8
+	mutex      sync.RWMutex
+	cfg        *Config
+	log        []*Event
 	logger     zerolog.Logger
 	hardware   *hardware.Hardware
 	closeChan  chan any
@@ -33,11 +38,21 @@ func (m *Motion) run() {
 	for {
 		select {
 		case <-t.C:
-			newVal := m.hardware.ReadPin(m.pin)
+			newVal := m.hardware.ReadPin(m.cfg.Pin)
 			if newVal != lastVal {
 				now := time.Now()
-				if lastFlip.Add(cooldownInterval).Before(now) {
-					// TODO: something when motion is detected
+				if lastFlip.Add(m.cfg.Cooldown).Before(now) {
+					func() {
+						m.mutex.Lock()
+						defer m.mutex.Unlock()
+						m.log = append(m.log, &Event{
+							Timestamp: now,
+							Motion:    newVal,
+						})
+						if len(m.log) > m.cfg.LogSize {
+							m.log = m.log[1:]
+						}
+					}()
 					lastVal = newVal
 					lastFlip = now
 				}
@@ -48,15 +63,41 @@ func (m *Motion) run() {
 	}
 }
 
-func New(cfg *Config, h *hardware.Hardware) *Motion {
+func New(cfg *Config, h *hardware.Hardware) (*Motion, error) {
+
+	// Sanity check on config
+	if cfg.Pin == 0 {
+		return nil, errors.New("pin for motion sensor not specified")
+	}
+	if cfg.Cooldown == 0 {
+		cfg.Cooldown = 2 * time.Second
+	}
+	if cfg.LogSize == 0 {
+		cfg.LogSize = 20
+	}
+
+	// Initialize the selected pin
 	h.InitPin(cfg.Pin, hardware.Input)
+
+	// Create the Motion instance
 	m := &Motion{
-		pin:      cfg.Pin,
+		cfg:      cfg,
 		logger:   log.With().Str("package", "motion").Logger(),
 		hardware: h,
 	}
+
+	// Start the monitoring goroutine
 	go m.run()
-	return m
+
+	return m, nil
+}
+
+func (m *Motion) Log() []*Event {
+	m.mutex.RLock()
+	defer m.mutex.RUnlock()
+	ret := make([]*Event, len(m.log))
+	copy(ret, m.log)
+	return ret
 }
 
 func (m *Motion) Close() {
