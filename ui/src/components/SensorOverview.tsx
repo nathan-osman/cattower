@@ -24,16 +24,18 @@ export default function SensorOverview() {
 
   return (
     <table className="border-separate border-spacing-x-2">
-      {
-        values.map(v => (
-          <tr>
-            <th className="text-right">
-              {v.name}:
-            </th>
-            <td>{v.value.toFixed(1)} &deg;C</td>
-          </tr>
-        ))
-      }
+      <tbody>
+        {
+          values.map(v => (
+            <tr key={v.name}>
+              <th className="text-right">
+                {v.name}:
+              </th>
+              <td>{v.value.toFixed(1)} &deg;C</td>
+            </tr>
+          ))
+        }
+      </tbody>
     </table>
   )
 }
