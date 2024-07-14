@@ -81,9 +81,11 @@ func New(cfg *Config, h *hardware.Hardware) (*Motion, error) {
 
 	// Create the Motion instance
 	m := &Motion{
-		cfg:      cfg,
-		logger:   log.With().Str("package", "motion").Logger(),
-		hardware: h,
+		cfg:        cfg,
+		logger:     log.With().Str("package", "motion").Logger(),
+		hardware:   h,
+		closeChan:  make(chan any),
+		closedChan: make(chan any),
 	}
 
 	// Start the monitoring goroutine
