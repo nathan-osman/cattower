@@ -48,6 +48,16 @@ func New(
 		}
 	)
 
+	// Serve the video directory from /fs/videos (if provided)
+	if cfg.VideoDir != "" {
+		r.Use(
+			static.Serve(
+				"/fs/videos/",
+				static.LocalFile(cfg.VideoDir, false),
+			),
+		)
+	}
+
 	// Serve the static files from /
 	r.Use(
 		static.Serve(

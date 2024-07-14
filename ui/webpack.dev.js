@@ -8,7 +8,7 @@ module.exports = merge(common, {
     historyApiFallback: true,
     proxy: [
       {
-        context: ['/api'],
+        context: ['/api', '/fs'],
         target: 'http://127.0.0.1:8000',
       },
     ],
