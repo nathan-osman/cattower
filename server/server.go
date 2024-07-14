@@ -82,6 +82,8 @@ func New(
 		groupApi.POST("/leds/set-colors", s.apiLedsSetColors)
 		groupApi.GET("/motion/log", s.apiMotionLog)
 		groupApi.GET("/sensors/overview", s.apiSensorsOverview)
+		groupApi.GET("/system/volume", s.apiSystemVolume)
+		groupApi.POST("/system/volume/set", s.apiSystemVolumeSet)
 		groupApi.GET("/videos", s.apiVideosIndex)
 	}
 

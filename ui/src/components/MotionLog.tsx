@@ -22,7 +22,7 @@ export default function MotionLog() {
         {
           log.map((v, i) => (
             <div key={i}>
-              {v.timestamp} - {v.motion}
+              {new Date(v.timestamp).toString()} - {v.motion ? "active" : "inactive"}
             </div>
           ))
         }
