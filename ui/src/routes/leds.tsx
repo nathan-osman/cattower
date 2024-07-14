@@ -4,7 +4,7 @@ import LampSvg from '../images/lamp.svg'
 export default function Leds() {
 
   function sendCommand(cmd: string) {
-    fetch('/api/set-colors', {
+    fetch('/api/leds/set-colors', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',

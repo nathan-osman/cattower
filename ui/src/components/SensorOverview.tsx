@@ -11,7 +11,7 @@ export default function SensorOverview() {
 
   useEffect(() => {
     const updateValues = () => {
-      fetch('/api/get-sensors')
+      fetch('/api/sensors/overview')
         .then(v => v.json())
         .then(v => setValues(v))
     }
