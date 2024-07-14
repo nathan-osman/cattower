@@ -47,14 +47,14 @@ func main() {
 			defer h.Close()
 
 			// Init InfluxDB
-			i, err := influxdb.New(cfg.InfluxDB)
+			i, err := influxdb.New(&cfg.InfluxDB)
 			if err != nil {
 				return err
 			}
 			defer i.Close()
 
 			// Create the server
-			s, err := server.New(h, i)
+			s, err := server.New(&cfg.Server, h, i)
 			if err != nil {
 				return err
 			}

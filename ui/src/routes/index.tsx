@@ -3,6 +3,7 @@ import BigButton from '../components/BigButton'
 import SensorOverview from '../components/SensorOverview'
 import LampSvg from '../images/lamp.svg'
 import SensorsSvg from '../images/sensors.svg'
+import VideosSvg from '../images/videos.svg'
 
 export default function Index() {
 
@@ -23,6 +24,11 @@ export default function Index() {
           icon={SensorsSvg}
           text="Sensors"
           onClick={() => navigate('/sensors')}
+        />
+        <BigButton
+          icon={VideosSvg}
+          text="Videos"
+          onClick={() => navigate('/videos')}
         />
       </div>
     </div>

@@ -1,7 +1,6 @@
 package server
 
 import (
-	"encoding/json"
 	"image/color"
 	"net/http"
 
@@ -15,7 +14,7 @@ const (
 	cmdSidesOff = "sides_off"
 )
 
-type apiSetColorsParams struct {
+type apiLedsSetColorsParams struct {
 	Command string `json:"command"`
 }
 
@@ -25,8 +24,8 @@ func (s *Server) fillPixels(start, end int, c color.Color) {
 	}
 }
 
-func (s *Server) apiSetColors(c *gin.Context) {
-	v := &apiSetColorsParams{}
+func (s *Server) apiLedsSetColors(c *gin.Context) {
+	v := &apiLedsSetColorsParams{}
 	if err := c.ShouldBindJSON(v); err != nil {
 		panic(err)
 	}
@@ -46,32 +45,4 @@ func (s *Server) apiSetColors(c *gin.Context) {
 		panic(err)
 	}
 	c.Status(http.StatusNoContent)
-}
-
-type apiGetSensorsResponse struct {
-	Name  string  `json:"name"`
-	Value float64 `json:"value"`
-}
-
-func (s *Server) apiGetSensors(c *gin.Context) {
-	r, err := s.influxdb.Query(
-		`SELECT LAST("value") from "temperature" GROUP BY "location"`,
-	)
-	if err != nil {
-		panic(err)
-	}
-	o := []apiGetSensorsResponse{}
-	for _, r := range r.Results {
-		for _, s := range r.Series {
-			v, err := s.Values[0][1].(json.Number).Float64()
-			if err != nil {
-				panic(err)
-			}
-			o = append(o, apiGetSensorsResponse{
-				Name:  s.Tags["location"],
-				Value: v,
-			})
-		}
-	}
-	c.JSON(http.StatusOK, o)
 }

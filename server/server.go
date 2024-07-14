@@ -7,7 +7,6 @@ import (
 
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
-	"github.com/nathan-osman/cattower/config"
 	"github.com/nathan-osman/cattower/hardware"
 	"github.com/nathan-osman/cattower/influxdb"
 	"github.com/nathan-osman/cattower/ui"
@@ -16,9 +15,9 @@ import (
 )
 
 type Server struct {
+	cfg      *Config
 	server   http.Server
 	logger   zerolog.Logger
-	cfg      *config.Config
 	hardware *hardware.Hardware
 	influxdb *influxdb.InfluxDB
 }
@@ -29,6 +28,7 @@ func init() {
 }
 
 func New(
+	cfg *Config,
 	h *hardware.Hardware,
 	i *influxdb.InfluxDB,
 ) (*Server, error) {
@@ -37,6 +37,7 @@ func New(
 	var (
 		r = gin.New()
 		s = &Server{
+			cfg: cfg,
 			server: http.Server{
 				Addr:    ":8000",
 				Handler: r,
@@ -64,8 +65,9 @@ func New(
 			gin.CustomRecoveryWithWriter(nil, panicToJSONError),
 		)
 
-		groupApi.POST("/set-colors", s.apiSetColors)
-		groupApi.GET("/get-sensors", s.apiGetSensors)
+		groupApi.POST("/leds/set-colors", s.apiLedsSetColors)
+		groupApi.GET("/sensors/overview", s.apiSensorsOverview)
+		groupApi.GET("/videos", s.apiVideosIndex)
 	}
 
 	// Serve the static files on all other paths too

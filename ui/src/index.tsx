@@ -8,6 +8,7 @@ import App from './components/App'
 import Index from './routes'
 import Leds from './routes/leds'
 import Sensors from './routes/sensors'
+import Videos from './routes/videos'
 import './index.css'
 
 const router = createBrowserRouter([
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: '/sensors',
         element: <Sensors />,
+      },
+      {
+        path: '/videos',
+        element: <Videos />,
       },
     ],
   },
