@@ -8,6 +8,7 @@ import (
 
 	"github.com/nathan-osman/cattower/config"
 	"github.com/nathan-osman/cattower/hardware"
+	"github.com/nathan-osman/cattower/influxdb"
 	"github.com/nathan-osman/cattower/server"
 	"github.com/urfave/cli/v2"
 	"gopkg.in/yaml.v3"
@@ -45,8 +46,15 @@ func main() {
 			}
 			defer h.Close()
 
+			// Init InfluxDB
+			i, err := influxdb.New(cfg.InfluxDB)
+			if err != nil {
+				return err
+			}
+			defer i.Close()
+
 			// Create the server
-			s, err := server.New(cfg, h)
+			s, err := server.New(h, i)
 			if err != nil {
 				return err
 			}

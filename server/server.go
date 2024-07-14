@@ -7,9 +7,9 @@ import (
 
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
-	"github.com/influxdata/influxdb/client/v2"
 	"github.com/nathan-osman/cattower/config"
 	"github.com/nathan-osman/cattower/hardware"
+	"github.com/nathan-osman/cattower/influxdb"
 	"github.com/nathan-osman/cattower/ui"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
@@ -19,8 +19,8 @@ type Server struct {
 	server   http.Server
 	logger   zerolog.Logger
 	cfg      *config.Config
-	client   client.Client
 	hardware *hardware.Hardware
+	influxdb *influxdb.InfluxDB
 }
 
 func init() {
@@ -28,18 +28,10 @@ func init() {
 	gin.SetMode(gin.ReleaseMode)
 }
 
-func New(cfg *config.Config, h *hardware.Hardware) (*Server, error) {
-
-	// Create the InfluxDB client
-	c, err := client.NewHTTPClient(client.HTTPConfig{
-		Addr:     cfg.InfluxDB.Addr,
-		Username: cfg.InfluxDB.Username,
-		Password: cfg.InfluxDB.Password,
-	})
-	if err != nil {
-		return nil, err
-	}
-	defer c.Close()
+func New(
+	h *hardware.Hardware,
+	i *influxdb.InfluxDB,
+) (*Server, error) {
 
 	// Initialize the server
 	var (
@@ -50,9 +42,8 @@ func New(cfg *config.Config, h *hardware.Hardware) (*Server, error) {
 				Handler: r,
 			},
 			logger:   log.With().Str("package", "server").Logger(),
-			cfg:      cfg,
-			client:   c,
 			hardware: h,
+			influxdb: i,
 		}
 	)
 

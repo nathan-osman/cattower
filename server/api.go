@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/influxdata/influxdb/client/v2"
 )
 
 const (
@@ -55,10 +54,9 @@ type apiGetSensorsResponse struct {
 }
 
 func (s *Server) apiGetSensors(c *gin.Context) {
-	r, err := s.client.Query(client.Query{
-		Command:  `SELECT LAST("value") from "temperature" GROUP BY "location"`,
-		Database: s.cfg.InfluxDB.Database,
-	})
+	r, err := s.influxdb.Query(
+		`SELECT LAST("value") from "temperature" GROUP BY "location"`,
+	)
 	if err != nil {
 		panic(err)
 	}

@@ -1,11 +1,12 @@
 package config
 
+import (
+	"github.com/nathan-osman/cattower/influxdb"
+	"github.com/nathan-osman/cattower/motion"
+)
+
 // Config stores configuration data for the application.
 type Config struct {
-	InfluxDB struct {
-		Addr     string `yaml:"addr"`
-		Username string `yaml:"username"`
-		Password string `yaml:"password"`
-		Database string `yaml:"database"`
-	} `yaml:"influxdb"`
+	InfluxDB *influxdb.Config `yaml:"influxdb"`
+	Motion   *motion.Config   `yaml:"motion"`
 }
