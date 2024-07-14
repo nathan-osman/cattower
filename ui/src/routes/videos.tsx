@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import BigButton from '../components/BigButton'
+import Button from '../components/Button'
 import VideoSvg from '../images/video.svg'
 
 export default function Videos() {
@@ -24,14 +24,15 @@ export default function Videos() {
           <source src={`/fs/videos/${curVideo}`} />
         </video>
       }
-      <div className="flex">
+      <div className="flex flex-col gap-y-2">
         {videos.map((v, i) => (
-          <BigButton
+          <Button
             key={i}
-            icon={VideoSvg}
-            text={v}
             onClick={() => setCurVideo(v)}
-          />
+          >
+            <img src={VideoSvg} className="w-8" />
+            {v}
+          </Button>
         ))}
       </div>
     </>
