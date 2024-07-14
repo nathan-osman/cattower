@@ -53,7 +53,7 @@ func (h *Hardware) InitPin(pin uint8, direction Direction) {
 }
 
 func (h *Hardware) ReadPin(pin uint8) bool {
-	return rpio.Pin(pin).ReadPin == rpio.High
+	return rpio.Pin(pin).Read() == rpio.High
 }
 
 func (h *Hardware) Close() {
