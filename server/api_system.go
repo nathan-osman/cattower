@@ -33,7 +33,7 @@ func (s *Server) apiSystemVolume(c *gin.Context) {
 	if m == nil {
 		panic("unable to retrieve volume")
 	}
-	v, err := strconv.Atoi(string(m))
+	v, err := strconv.Atoi(string(m[:len(m)-1]))
 	if err != nil {
 		panic(err)
 	}
