@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
+	"path"
 	"path/filepath"
 	"text/template"
 
@@ -13,14 +14,12 @@ import (
 const (
 	systemdUnitFile = `[Unit]
 Description=cattower
-Wants=network-online.target
-After=network-online.target
 
 [Service]
 ExecStart={{.path}} --config {{.config_path}}
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
 `
 	configFile = `# TODO: use this file to configure the application
 
@@ -29,6 +28,9 @@ influxdb:
   username:
   password:
   database:
+leds:
+  addr: localhost:8123
+	count: 48
 motion:
   pin: 7
   cooldown: 2s
@@ -37,9 +39,15 @@ motion:
 )
 
 var (
+	homeDir, _            = os.UserHomeDir()
+	configDefaultFileName = path.Join(
+		homeDir,
+		".config/cattower/config.yaml",
+	)
+
 	configFlag = &cli.StringFlag{
 		Name:    "config",
-		Value:   "/etc/cattower/config.json",
+		Value:   configDefaultFileName,
 		EnvVars: []string{"CONFIG"},
 		Usage:   "filename of configuration file",
 	}
@@ -82,7 +90,10 @@ func install(c *cli.Context) error {
 
 	// Write the unit file
 	if err := writeTemplate(
-		"/lib/systemd/system/cattower.service",
+		path.Join(
+			homeDir,
+			".config/systemd/user/cattower.service",
+		),
 		systemdUnitFile,
 		0666,
 		map[string]interface{}{
@@ -109,8 +120,8 @@ func install(c *cli.Context) error {
 	fmt.Println(c.String("config"))
 	fmt.Println("")
 	fmt.Println("To enable the service and start it, run:")
-	fmt.Println("  systemctl enable cattower")
-	fmt.Println("  systemctl start cattower")
+	fmt.Println("  systemctl --user enable cattower")
+	fmt.Println("  systemctl --user start cattower")
 
 	return nil
 }

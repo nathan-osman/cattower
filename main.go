@@ -9,6 +9,7 @@ import (
 	"github.com/nathan-osman/cattower/config"
 	"github.com/nathan-osman/cattower/hardware"
 	"github.com/nathan-osman/cattower/influxdb"
+	"github.com/nathan-osman/cattower/leds"
 	"github.com/nathan-osman/cattower/motion"
 	"github.com/nathan-osman/cattower/server"
 	"github.com/urfave/cli/v2"
@@ -47,6 +48,9 @@ func main() {
 			}
 			defer h.Close()
 
+			// Initialize the connection to the LEDs
+			l := leds.New(&cfg.Leds)
+
 			// Init InfluxDB
 			i, err := influxdb.New(&cfg.InfluxDB)
 			if err != nil {
@@ -63,7 +67,7 @@ func main() {
 			}
 
 			// Create the server
-			s, err := server.New(&cfg.Server, h, i, m)
+			s, err := server.New(&cfg.Server, h, i, l, m)
 			if err != nil {
 				return err
 			}

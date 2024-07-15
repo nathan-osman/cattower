@@ -20,7 +20,7 @@ type apiLedsSetColorsParams struct {
 
 func (s *Server) fillPixels(start, end int, c color.Color) {
 	for i := start; i < end; i++ {
-		s.hardware.SetPixel(i, c)
+		s.leds.SetPixel(i, c)
 	}
 }
 
@@ -41,7 +41,7 @@ func (s *Server) apiLedsSetColors(c *gin.Context) {
 	default:
 		panic("unrecognized command")
 	}
-	if err := s.hardware.WritePixels(); err != nil {
+	if err := s.leds.Apply(); err != nil {
 		panic(err)
 	}
 	c.Status(http.StatusNoContent)
