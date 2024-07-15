@@ -55,7 +55,7 @@ func (s *Server) apiSystemVolumeSet(c *gin.Context) {
 		"pactl",
 		"set-sink-volume",
 		"0",
-		strconv.Itoa(v.Volume),
+		strconv.Itoa(v.Volume)+"%",
 	).Run(); err != nil {
 		panic(err)
 	}
