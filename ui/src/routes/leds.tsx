@@ -16,7 +16,7 @@ export default function Leds() {
   }
 
   return (
-    <div className="flex gap-x-2">
+    <div className="inline-grid grid-rows-2 grid-flow-col gap-2">
       <BigButton
         icon={LampSvg}
         text="Top LEDs on"
