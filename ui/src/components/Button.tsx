@@ -15,7 +15,7 @@ export default function Button(props: PropsWithChildren<Props>) {
     className,
     "p-2 border rounded shadow-md bg-white flex justify-center gap-x-2",
     {
-      'bg-background-selected': pressed,
+      '!bg-background-selected': pressed,
     },
   )
 
