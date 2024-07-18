@@ -34,7 +34,7 @@ export default function Leds() {
         color={topColor}
         onChange={(c: string) => {
           setTopColor(c)
-          sendCommand('top_on', topColor)
+          sendCommand('top_on', c)
         }}
       />
       <BigButton
@@ -51,7 +51,7 @@ export default function Leds() {
         color={sidesColor}
         onChange={(c: string) => {
           setSidesColor(c)
-          sendCommand('sides_on', sidesColor)
+          sendCommand('sides_on', c)
         }}
       />
     </div>

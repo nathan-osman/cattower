@@ -32,8 +32,10 @@ func (s *Server) apiLedsSetColors(c *gin.Context) {
 		panic(err)
 	}
 	var onColor color.Color = color.White
-	if c, err := colorx.ParseHexColor(v.Color); err == nil {
-		onColor = c
+	if len(v.Color) > 0 {
+		if c, err := colorx.ParseHexColor(v.Color); err == nil {
+			onColor = c
+		}
 	}
 	switch v.Command {
 	case cmdTopOn:
