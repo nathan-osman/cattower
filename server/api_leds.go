@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/icza/gox/imagex/colorx"
 )
 
 const (
@@ -16,6 +17,7 @@ const (
 
 type apiLedsSetColorsParams struct {
 	Command string `json:"command"`
+	Color   string `json:"color"`
 }
 
 func (s *Server) fillPixels(start, end int, c color.Color) {
@@ -29,13 +31,17 @@ func (s *Server) apiLedsSetColors(c *gin.Context) {
 	if err := c.ShouldBindJSON(v); err != nil {
 		panic(err)
 	}
+	var onColor color.Color = color.White
+	if c, err := colorx.ParseHexColor(v.Color); err == nil {
+		onColor = c
+	}
 	switch v.Command {
 	case cmdTopOn:
-		s.fillPixels(32, 48, color.White)
+		s.fillPixels(32, 48, onColor)
 	case cmdTopOff:
 		s.fillPixels(32, 48, color.Black)
 	case cmdSidesOn:
-		s.fillPixels(0, 32, color.White)
+		s.fillPixels(0, 32, onColor)
 	case cmdSidesOff:
 		s.fillPixels(0, 32, color.Black)
 	default:
