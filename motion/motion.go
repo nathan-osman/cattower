@@ -81,6 +81,9 @@ func New(cfg *Config, h *hardware.Hardware) (*Motion, error) {
 
 	// Initialize the selected pin
 	h.InitPin(cfg.DetectPin, hardware.Input)
+	if cfg.AlertPin != 0 {
+		h.InitPin(cfg.AlertPin, hardware.Output)
+	}
 
 	// Create the Motion instance
 	m := &Motion{
