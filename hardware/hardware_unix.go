@@ -29,6 +29,14 @@ func (h *Hardware) ReadPin(pin uint8) bool {
 	return rpio.Pin(pin).Read() == rpio.High
 }
 
+func (h *Hardware) WritePin(pin uint8, v bool) {
+	if v {
+		rpio.Pin(pin).Write(rpio.High)
+	} else {
+		rpio.Pin(pin).Write(rpio.Low)
+	}
+}
+
 func (h *Hardware) Close() {
 	rpio.Close()
 }

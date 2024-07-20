@@ -12,4 +12,5 @@ func New() (*Hardware, error) {
 
 func (h *Hardware) InitPin(pin uint8, direction Direction) {}
 func (h *Hardware) ReadPin(pin uint8) bool                 { return false }
+func (h *Hardware) WritePin(ping uint8, v bool)            {}
 func (h *Hardware) Close()                                 {}

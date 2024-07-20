@@ -38,8 +38,11 @@ func (m *Motion) run() {
 	for {
 		select {
 		case <-t.C:
-			newVal := m.hardware.ReadPin(m.cfg.Pin)
+			newVal := m.hardware.ReadPin(m.cfg.DetectPin)
 			if newVal != lastVal {
+				if m.cfg.AlertPin != 0 {
+					m.hardware.WritePin(m.cfg.AlertPin, newVal)
+				}
 				now := time.Now()
 				if lastFlip.Add(m.cfg.Cooldown).Before(now) {
 					func() {
@@ -66,7 +69,7 @@ func (m *Motion) run() {
 func New(cfg *Config, h *hardware.Hardware) (*Motion, error) {
 
 	// Sanity check on config
-	if cfg.Pin == 0 {
+	if cfg.DetectPin == 0 {
 		return nil, errors.New("pin for motion sensor not specified")
 	}
 	if cfg.Cooldown == 0 {
@@ -77,7 +80,7 @@ func New(cfg *Config, h *hardware.Hardware) (*Motion, error) {
 	}
 
 	// Initialize the selected pin
-	h.InitPin(cfg.Pin, hardware.Input)
+	h.InitPin(cfg.DetectPin, hardware.Input)
 
 	// Create the Motion instance
 	m := &Motion{
