@@ -73,9 +73,9 @@ func (l *Leds) SetPixel(pixel int, c color.Color) {
 		r, g, b, _ := c.RGBA()
 		l.changes[pixel].Color = fmt.Sprintf(
 			"%s%s%s",
-			strconv.FormatInt(int64(r), 16),
-			strconv.FormatInt(int64(g), 16),
-			strconv.FormatInt(int64(b), 16),
+			strconv.FormatInt(int64(uint8(r/256)), 16),
+			strconv.FormatInt(int64(uint8(g/256)), 16),
+			strconv.FormatInt(int64(uint8(b/256)), 16),
 		)
 	}
 }
