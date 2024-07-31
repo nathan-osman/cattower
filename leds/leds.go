@@ -72,7 +72,7 @@ func (l *Leds) SetPixel(pixel int, c color.Color) {
 	if pixel >= 0 && pixel < l.count {
 		r, g, b, _ := c.RGBA()
 		l.changes[pixel].Color = fmt.Sprintf(
-			"%s%s%s",
+			"%02s%02s%02s",
 			strconv.FormatInt(int64(uint8(r/256)), 16),
 			strconv.FormatInt(int64(uint8(g/256)), 16),
 			strconv.FormatInt(int64(uint8(b/256)), 16),
